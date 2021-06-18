@@ -1,6 +1,23 @@
-import { CircularProgress } from '@material-ui/core';
-import React from 'react'
+import React from "react";
+import { CircularProgress, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
-export const Fallback = () => {
-        return (<CircularProgress style={{ position: 'fixed', top: '50%', left: '50%' }}/>);
+const useStyles = makeStyles((theme:Theme) => ({
+  fallback: {
+    color: theme.palette.primary.main,
+  }
+}))
+
+function Fallback() {
+  const classes = useStyles();
+  return (
+    <div>
+      <CircularProgress
+        style={{ position: "fixed", top: "50%", left: "50%" }}
+        className={classes.fallback}
+      />
+    </div>
+  );
 }
+
+export default Fallback;
