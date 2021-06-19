@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    color: theme.palette.secondary.light,
+    background: theme.palette.primary.main,
   },
   grow: {
     flexGrow: 1,
@@ -53,7 +55,7 @@ export default function PrimarySearchAppBar({ setOpen }: NavbarProps) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar} elevation={0}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -61,7 +63,7 @@ export default function PrimarySearchAppBar({ setOpen }: NavbarProps) {
             color="inherit"
             aria-label="open drawer"
             onClick={() => {
-              setOpen((prev:Boolean) => !prev);
+              setOpen((prev: Boolean) => !prev);
             }}
           >
             <MenuIcon />

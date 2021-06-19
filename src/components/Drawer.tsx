@@ -1,3 +1,4 @@
+import React from "react";
 import {
   List,
   ListItem,
@@ -8,7 +9,6 @@ import {
   Drawer,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React from "react";
 import clsx from "clsx";
 import HomeIcon from "@material-ui/icons/Home";
 import { Link } from "react-router-dom";
@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   drawer: {
     width: drawerWidth,
-    height: "100vh",
     flexShrink: 0,
     whiteSpace: "nowrap",
+    
   },
   drawerPaper: {
     width: drawerWidth,
@@ -84,12 +84,12 @@ export default function AppDrawer({ open }: DrawerProps) {
               <ListItemText primary={"Home"} />
             </ListItem>
           </Link>
-          <Link to="/about">
+          <Link to="/playground">
             <ListItem button>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary={"About"} />
+              <ListItemText primary={"Playground"} />
             </ListItem>
           </Link>
         </List>
