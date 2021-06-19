@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
-    
   },
   drawerPaper: {
     width: drawerWidth,
@@ -46,21 +45,19 @@ const useStyles = makeStyles((theme: Theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1,
-    },
+    width: 0,
   },
 }));
 
 interface DrawerProps {
-  open: Boolean;
+  open: boolean;
 }
 
 export default function AppDrawer({ open }: DrawerProps) {
   const classes = useStyles();
   return (
     <Drawer
+    open={open}
       className={clsx(classes.drawer, {
         [classes.drawerOpen]: open,
         [classes.drawerClose]: !open,

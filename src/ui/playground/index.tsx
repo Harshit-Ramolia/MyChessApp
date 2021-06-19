@@ -1,39 +1,78 @@
 import React, { useState } from "react";
-import Chessboard from "chessboardjsx";
-import { ChessInstance, ShortMove } from "chess.js";
+import Chessboard, { Position } from "chessboardjsx";
+import { InitialChess } from "../../constants/initialChess";
+import { Button, makeStyles, Theme } from "@material-ui/core";
 
-const Chess = require("chess.js");
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    align: "center",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  buttons: {
+    margin: "10px 10px",
+  },
+}));
 
 const Playground: React.FC = () => {
-  const [chess] = useState<ChessInstance>(
-    Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-  );
-  const [fen, setFen] = useState(chess.fen());
-
-  const handleMove = (move: ShortMove) => {
-    // setFen(chess.fen());
-    chess.move(move);
-    setFen(chess.fen());
-    // if (chess.move(move)) {
-    // }
-  };
-
+  const [positionValue, setPositionValue] = useState<Position>({
+    ...InitialChess,
+  });
+  const classes = useStyles();
   return (
     <React.Fragment>
-      <Chessboard
-        position={{a2: "wP", b2: "wP", c2: "wP", d2: "wP", e2: "wP", f2: "wP", g2: "wP", h2: "wP"}}
-        undo={true}
-        // onDrop={(move) =>
-        //   handleMove({
-        //     from: move.sourceSquare,
-        //     to: move.targetSquare,
-        //     promotion: "q",
-        //   })
-        // }
-        // boardStyle={{ backgroundColor: "rgb(181, 136, 99)" }}
-        // dropSquareStyle={{ boxShadow: "inset 0 0 1px 4px red" }}
-        // onPieceClick={(piece)=>(console.log(piece))}
-      />
+      <div className={classes.root}>
+        <div>
+          <Button
+            className={classes.buttons}
+            color="primary"
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              setPositionValue({ ...InitialChess });
+            }}
+          >
+            Initial
+          </Button>
+          <Button
+            className={classes.buttons}
+            color="primary"
+            variant="outlined"
+            size="small"
+            onClick={() => setPositionValue({})}
+          >
+            Clear
+          </Button>
+          <Button
+            className={classes.buttons}
+            color="primary"
+            variant="outlined"
+            size="small"
+            disabled
+          >
+            Save
+          </Button>
+          <Button
+            className={classes.buttons}
+            color="primary"
+            variant="outlined"
+            size="small"
+            disabled
+          >
+            Load
+          </Button>
+        </div>
+        <Chessboard
+          position={positionValue}
+          getPosition={(position) => {
+            setPositionValue(position);
+          }}
+          sparePieces={true}
+          width={400}
+        />
+      </div>
     </React.Fragment>
   );
 };

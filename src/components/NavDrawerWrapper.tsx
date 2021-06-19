@@ -32,7 +32,7 @@ interface NavDrawerWrapperProps {}
 
 const NavDrawerWrapper: React.FC<NavDrawerWrapperProps> = ({ children }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState<Boolean>(true);
+  const [open, setOpen] = useState<boolean>(true);
   return (
     <React.Fragment>
       <Navbar setOpen={setOpen} />
