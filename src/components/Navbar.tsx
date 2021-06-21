@@ -4,13 +4,24 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import Badge from "@material-ui/core/Badge";
+import { Button } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
+import {
+  GoogleLogin,
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from "react-google-login";
+
+function isGoogleLoginResponse(object: any): object is GoogleLoginResponse {
+  return "profileObj" in object;
+}
+
+const responseGoogle = (
+  response: GoogleLoginResponse | GoogleLoginResponseOffline
+) => {
+  if (isGoogleLoginResponse(response)) console.log(response.profileObj);
+};
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -25,11 +36,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    display: "none",
-    fontSize: "22px",
+    fontSize: "18px",
     fontWeight: 800,
     [theme.breakpoints.up("sm")]: {
       display: "block",
+      fontSize: "22px",
     },
   },
   sectionDesktop: {
@@ -74,35 +85,32 @@ export default function PrimarySearchAppBar({ setOpen }: NavbarProps) {
             </Typography>
           </Link>
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
+          <GoogleLogin
+            clientId="343751366568-6gqpsmkdmb2d8oh0ghkkohhirgmrjge6.apps.googleusercontent.com"
+            buttonText="Login"
+            // onFailure={()=>()}
+            onSuccess={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+            render={(renderProps) => (
+              <Button
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                // disabled={true}
+                variant="outlined"
+                color="secondary"
+                startIcon={
+                  <img
+                    src="icons/Google_'G'.png"
+                    style={{ width: "18px" }}
+                    alt=""
+                  />
+                }
+              >
+                Login
+              </Button>
+            )}
+          />
+          <div style={{ width: "100px" }}></div>
         </Toolbar>
       </AppBar>
     </div>

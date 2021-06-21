@@ -12,6 +12,10 @@ import { makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import HomeIcon from "@material-ui/icons/Home";
 import { Link } from "react-router-dom";
+import HistoryIcon from '@material-ui/icons/History';
+import ChangeHistoryIcon from '@material-ui/icons/ChangeHistory';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 const drawerWidth = 240;
 
@@ -81,25 +85,39 @@ export default function AppDrawer({ open }: DrawerProps) {
               <ListItemText primary={"Home"} />
             </ListItem>
           </Link>
+          <Link to="/game">
+            <ListItem button>
+              <ListItemIcon>
+                <PlayArrowIcon />
+              </ListItemIcon>
+              <ListItemText primary={"New Game"} />
+            </ListItem>
+          </Link>
           <Link to="/playground">
             <ListItem button>
               <ListItemIcon>
-                <HomeIcon />
+                <ChangeHistoryIcon />
               </ListItemIcon>
               <ListItemText primary={"Playground"} />
             </ListItem>
           </Link>
-        </List>
-        {/* <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
+          <Link to="/invitation">
+            <ListItem button>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <EventAvailableIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={"Invitations"} />
             </ListItem>
-          ))}
-        </List> */}
+          </Link>
+          <Link to="/history">
+            <ListItem button>
+              <ListItemIcon>
+                <HistoryIcon />
+              </ListItemIcon>
+              <ListItemText primary={"History"} />
+            </ListItem>
+          </Link>
+        </List>
       </div>
     </Drawer>
   );
