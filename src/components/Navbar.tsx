@@ -1,27 +1,15 @@
+import React from "react";
 import { Theme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { Button } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
-import {
-  GoogleLogin,
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from "react-google-login";
-
-function isGoogleLoginResponse(object: any): object is GoogleLoginResponse {
-  return "profileObj" in object;
-}
-
-const responseGoogle = (
-  response: GoogleLoginResponse | GoogleLoginResponseOffline
-) => {
-  if (isGoogleLoginResponse(response)) console.log(response.profileObj);
-};
+import GoogleLoginComponent from "./GoogleLogin";
+import { useMeQuery } from "../generated/graphql";
+import LogoutComponent from "./Logout";
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -63,7 +51,20 @@ interface NavbarProps {
 
 export default function PrimarySearchAppBar({ setOpen }: NavbarProps) {
   const classes = useStyles();
-
+  const [{ data, fetching }] = useMeQuery();
+  let body = null;
+  if (!fetching) {
+    if (!data?.me) {
+      body = <GoogleLoginComponent />;
+    } else {
+      body = (
+        <React.Fragment>
+          <Typography>{data.me.username}</Typography>
+          <LogoutComponent />
+        </React.Fragment>
+      );
+    }
+  }
   return (
     <div className={classes.grow}>
       <AppBar position="fixed" className={classes.appBar} elevation={0}>
@@ -85,31 +86,7 @@ export default function PrimarySearchAppBar({ setOpen }: NavbarProps) {
             </Typography>
           </Link>
           <div className={classes.grow} />
-          <GoogleLogin
-            clientId="343751366568-6gqpsmkdmb2d8oh0ghkkohhirgmrjge6.apps.googleusercontent.com"
-            buttonText="Login"
-            // onFailure={()=>()}
-            onSuccess={responseGoogle}
-            cookiePolicy={"single_host_origin"}
-            render={(renderProps) => (
-              <Button
-                onClick={renderProps.onClick}
-                disabled={renderProps.disabled}
-                // disabled={true}
-                variant="outlined"
-                color="secondary"
-                startIcon={
-                  <img
-                    src="icons/Google_'G'.png"
-                    style={{ width: "18px" }}
-                    alt=""
-                  />
-                }
-              >
-                Login
-              </Button>
-            )}
-          />
+          {body}
           <div style={{ width: "100px" }}></div>
         </Toolbar>
       </AppBar>

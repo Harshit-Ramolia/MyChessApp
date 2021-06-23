@@ -90,7 +90,7 @@ export default function AppDrawer({ open }: DrawerProps) {
               <ListItemIcon>
                 <PlayArrowIcon />
               </ListItemIcon>
-              <ListItemText primary={"New Game"} />
+              <ListItemText primary={"Game"} />
             </ListItem>
           </Link>
           <Link to="/playground">
