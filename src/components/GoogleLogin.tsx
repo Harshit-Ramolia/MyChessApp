@@ -21,6 +21,7 @@ const GoogleLoginComponent = () => {
       let graphqlResponse = await login({ token: response.tokenId });
       if (graphqlResponse.data?.login.errors) {
         //   Error
+        console.log(graphqlResponse.data?.login.errors)
       } else {
         //   Login successful
       }

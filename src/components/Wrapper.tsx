@@ -1,8 +1,6 @@
 import { Theme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React, { useState } from "react";
-import Drawer from "./Drawer";
-import Navbar from "./Navbar";
+import React from "react";
 
 const useStyles = makeStyles((theme: Theme) => ({
   toolbar: {
@@ -10,7 +8,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
   content: {
@@ -21,22 +18,14 @@ const useStyles = makeStyles((theme: Theme) => ({
       paddingRight: theme.spacing(30),
     },
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
 }));
 
-interface NavDrawerWrapperProps {}
+interface WrapperProps {}
 
-const NavDrawerWrapper: React.FC<NavDrawerWrapperProps> = ({ children }) => {
+const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState<boolean>(true);
   return (
     <React.Fragment>
-      <Navbar setOpen={setOpen} />
-      <Drawer open={open} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {children}
@@ -45,4 +34,4 @@ const NavDrawerWrapper: React.FC<NavDrawerWrapperProps> = ({ children }) => {
   );
 };
 
-export default NavDrawerWrapper;
+export default Wrapper;

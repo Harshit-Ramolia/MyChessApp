@@ -2,5 +2,5 @@ fragment UserFragment on UserClass {
   _id
   username
   email
-  password
+  gameStatus
 }

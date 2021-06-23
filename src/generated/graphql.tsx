@@ -43,11 +43,17 @@ export type Mutation = {
   __typename?: 'Mutation';
   login: UserResponse;
   logout: Scalars['Boolean'];
+  invitation: UserResponse;
 };
 
 
 export type MutationLoginArgs = {
   token: Scalars['String'];
+};
+
+
+export type MutationInvitationArgs = {
+  email: Scalars['String'];
 };
 
 export type PositionClass = {
@@ -64,6 +70,7 @@ export type Query = {
   me?: Maybe<UserClass>;
   users: Array<UserClass>;
   userByID?: Maybe<UserClass>;
+  GameStatus: Scalars['Int'];
   createNewChess: ChessResponse;
 };
 
@@ -79,7 +86,7 @@ export type UserClass = {
   updatedAt: Scalars['DateTime'];
   username?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
+  gameStatus?: Maybe<Scalars['Float']>;
 };
 
 export type UserResponse = {
@@ -95,7 +102,31 @@ export type ErrorFragmentFragment = (
 
 export type UserFragmentFragment = (
   { __typename?: 'UserClass' }
-  & Pick<UserClass, '_id' | 'username' | 'email' | 'password'>
+  & Pick<UserClass, '_id' | 'username' | 'email' | 'gameStatus'>
+);
+
+export type GameStatusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GameStatusQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'GameStatus'>
+);
+
+export type InvitationMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type InvitationMutation = (
+  { __typename?: 'Mutation' }
+  & { invitation: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & ErrorFragmentFragment
+    )>> }
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -147,9 +178,31 @@ export const UserFragmentFragmentDoc = gql`
   _id
   username
   email
-  password
+  gameStatus
 }
     `;
+export const GameStatusDocument = gql`
+    query GameStatus {
+  GameStatus
+}
+    `;
+
+export function useGameStatusQuery(options: Omit<Urql.UseQueryArgs<GameStatusQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GameStatusQuery>({ query: GameStatusDocument, ...options });
+};
+export const InvitationDocument = gql`
+    mutation Invitation($email: String!) {
+  invitation(email: $email) {
+    errors {
+      ...ErrorFragment
+    }
+  }
+}
+    ${ErrorFragmentFragmentDoc}`;
+
+export function useInvitationMutation() {
+  return Urql.useMutation<InvitationMutation, InvitationMutationVariables>(InvitationDocument);
+};
 export const LoginDocument = gql`
     mutation Login($token: String!) {
   login(token: $token) {
