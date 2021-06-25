@@ -101,7 +101,7 @@ export default function AppDrawer({ open }: DrawerProps) {
               <ListItemText primary={"Playground"} />
             </ListItem>
           </Link>
-          <Link to="/invitation">
+          <Link to="/invitations">
             <ListItem button>
               <ListItemIcon>
                 <EventAvailableIcon />

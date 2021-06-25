@@ -1,0 +1,7 @@
+mutation Invite($email: String!) {
+  invite(email: $email) {
+    errors {
+      ...ErrorFragment
+    }
+  }
+}

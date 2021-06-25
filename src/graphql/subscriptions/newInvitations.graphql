@@ -1,0 +1,10 @@
+subscription NewInvitation($id:String!) {
+  newInvitation(id: $id) {
+    host {
+      ...UserFragment
+    }
+    friend {
+      ...UserFragment
+    }
+  }
+}

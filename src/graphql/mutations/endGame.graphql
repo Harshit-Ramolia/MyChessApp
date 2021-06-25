@@ -1,0 +1,3 @@
+mutation EndGame($chessID: String!) {
+  endGame(chessID: $chessID)
+}

@@ -1,0 +1,3 @@
+subscription GameStarted($id:String!){
+  gameStarted(id:$id)
+}

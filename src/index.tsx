@@ -5,18 +5,25 @@ import App from "./pages/App";
 import Theme from "./configuration/Theme";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { createClient, dedupExchange, fetchExchange, Provider } from "urql";
+import { subscriptionExchange } from "urql";
+import { SubscriptionClient } from "subscriptions-transport-ws";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import {
+  AcceptInvitationMutation,
+  GameStartedSubscription,
   GameStatusDocument,
   GameStatusQuery,
-  InvitationMutation,
+  InviteMutation,
   LoginMutation,
   LogoutMutation,
   MeDocument,
   MeQuery,
 } from "./generated/graphql";
 import { CustomUpdateQuery } from "./utils/CustomQueryUpdate";
-
+const subscriptionClient = new SubscriptionClient(
+  "ws://localhost:8080/graphql",
+  { reconnect: true }
+);
 const client = createClient({
   url: "http://localhost:8080/graphql",
   fetchOptions: {
@@ -24,12 +31,18 @@ const client = createClient({
   },
   exchanges: [
     dedupExchange,
+    subscriptionExchange({
+      forwardSubscription(operation) {
+        return subscriptionClient.request(operation);
+      },
+    }),
     cacheExchange({
       updates: {
         Mutation: {
-          login: (result, args, caches, info) => {
+          login: (result, args, cache, info) => {
+            console.log("L")
             CustomUpdateQuery<LoginMutation, MeQuery>(
-              caches,
+              cache,
               { query: MeDocument },
               result,
               (loginResult, query) => {
@@ -41,7 +54,7 @@ const client = createClient({
               }
             );
             CustomUpdateQuery<LoginMutation, GameStatusQuery>(
-              caches,
+              cache,
               { query: GameStatusDocument },
               result,
               (loginResult, query) => {
@@ -52,6 +65,8 @@ const client = createClient({
                 }
               }
             );
+            cache.invalidate("Query", "invitationsOfUser");
+            cache.invalidate("Query", "currentGame");
           },
           logout: (result, args, caches, info) => {
             CustomUpdateQuery<LogoutMutation, MeQuery>(
@@ -79,16 +94,49 @@ const client = createClient({
               }
             );
           },
-          invitation: (result, args, caches, info) => {
-            CustomUpdateQuery<InvitationMutation, GameStatusQuery>(
+          invite: (result, args, caches, info) => {
+            CustomUpdateQuery<InviteMutation, GameStatusQuery>(
               caches,
               { query: GameStatusDocument },
               result,
               (invitationResponse, query) => {
-                if (invitationResponse.invitation.errors) {
+                if (invitationResponse.invite.errors) {
                   return query;
                 } else {
                   return { GameStatus: 1 };
+                }
+              }
+            );
+          },
+          acceptInvitation: (result, args, cache, info) => {
+            CustomUpdateQuery<AcceptInvitationMutation, GameStatusQuery>(
+              cache,
+              { query: GameStatusDocument },
+              result,
+              (InvitationResult, query) => {
+                if (InvitationResult.acceptInvitation === false) {
+                  return query;
+                } else {
+                  return { GameStatus: 2 };
+                }
+              }
+            );
+            cache.invalidate("Query", "invitationsOfUser");
+            cache.invalidate("Query", "currentGame");
+          },
+        },
+        Subscription: {
+          gameStarted: (result, args, cache, info) => {
+            console.log("A")
+            CustomUpdateQuery<GameStartedSubscription, GameStatusQuery>(
+              cache,
+              { query: GameStatusDocument },
+              result,
+              (Result, query) => {
+                if (Result.gameStarted === false) {
+                  return query;
+                } else {
+                  return { GameStatus: 2 };
                 }
               }
             );

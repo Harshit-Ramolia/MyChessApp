@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import React from "react";
-import { useInvitationMutation } from "../../generated/graphql";
+import { useInviteMutation } from "../../generated/graphql";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,15 +31,15 @@ const useStyles = makeStyles((theme) => ({
 
 const InvitationForm = () => {
   const classes = useStyles();
-  const [, Invitation] = useInvitationMutation();
+  const [, Invite] = useInviteMutation();
   return (
     <Formik
       initialValues={{ friend: "" }}
       onSubmit={async (values, actions) => {
-        let response = await Invitation({ email: values.friend });
-        if (response.data?.invitation.errors) {
+        let response = await Invite({ email: values.friend });
+        if (response.data?.invite.errors) {
           actions.setErrors({
-            friend: response.data.invitation.errors[0].message,
+            friend: response.data.invite.errors[0].message,
           });
         } else {
           actions.setValues({ friend: "" });

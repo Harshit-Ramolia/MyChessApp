@@ -1,0 +1,11 @@
+query CurrentGame {
+  currentGame {
+    _id
+    white {
+      ...UserFragment
+    }
+    black {
+      ...UserFragment
+    }
+  }
+}

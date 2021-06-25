@@ -14,6 +14,7 @@ const NavDrawerWrapper = React.lazy(() => import("../components/Wrapper"));
 const Home = React.lazy(() => import("./home"));
 const Playground = React.lazy(() => import("./playground"));
 const Game = React.lazy(() => import("./game"));
+const Invitations = React.lazy(() => import("./invitations"));
 
 function Routes() {
   return (
@@ -31,6 +32,9 @@ function Routes() {
               </Route>
               <Route path="/game" exact>
                 <Game />
+              </Route>
+              <Route path="/invitations" exact>
+                <Invitations />
               </Route>
               <Redirect to="/" />
             </Switch>

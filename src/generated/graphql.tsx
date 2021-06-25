@@ -24,6 +24,7 @@ export type ChessClass = {
   white: UserClass;
   black: UserClass;
   firstPosition?: Maybe<PositionClass>;
+  isGameRunning: Scalars['Boolean'];
 };
 
 export type ChessResponse = {
@@ -39,11 +40,23 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type InvitationClass = {
+  __typename?: 'InvitationClass';
+  _id: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  host: UserClass;
+  friend: UserClass;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   login: UserResponse;
   logout: Scalars['Boolean'];
-  invitation: UserResponse;
+  invite: UserResponse;
+  endGame: Scalars['Boolean'];
+  cancelInvitation: Scalars['Boolean'];
+  acceptInvitation: Scalars['Boolean'];
 };
 
 
@@ -52,8 +65,18 @@ export type MutationLoginArgs = {
 };
 
 
-export type MutationInvitationArgs = {
+export type MutationInviteArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationEndGameArgs = {
+  chessID: Scalars['String'];
+};
+
+
+export type MutationAcceptInvitationArgs = {
+  hostID: Scalars['String'];
 };
 
 export type PositionClass = {
@@ -62,7 +85,7 @@ export type PositionClass = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   next?: Maybe<PositionClass>;
-  position?: Maybe<Scalars['String']>;
+  data?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -71,11 +94,30 @@ export type Query = {
   users: Array<UserClass>;
   userByID?: Maybe<UserClass>;
   GameStatus: Scalars['Int'];
+  currentGame?: Maybe<ChessClass>;
   createNewChess: ChessResponse;
+  allChess: Array<ChessClass>;
+  invitationsOfUser?: Maybe<Array<InvitationClass>>;
 };
 
 
 export type QueryUserByIdArgs = {
+  id: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  gameStarted?: Maybe<Scalars['Boolean']>;
+  newInvitation?: Maybe<InvitationClass>;
+};
+
+
+export type SubscriptionGameStartedArgs = {
+  id: Scalars['String'];
+};
+
+
+export type SubscriptionNewInvitationArgs = {
   id: Scalars['String'];
 };
 
@@ -86,7 +128,8 @@ export type UserClass = {
   updatedAt: Scalars['DateTime'];
   username?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  gameStatus?: Maybe<Scalars['Float']>;
+  gameStatus: Scalars['Float'];
+  currentGame?: Maybe<Scalars['String']>;
 };
 
 export type UserResponse = {
@@ -105,6 +148,26 @@ export type UserFragmentFragment = (
   & Pick<UserClass, '_id' | 'username' | 'email' | 'gameStatus'>
 );
 
+export type AcceptInvitationMutationVariables = Exact<{
+  hostID: Scalars['String'];
+}>;
+
+
+export type AcceptInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'acceptInvitation'>
+);
+
+export type EndGameMutationVariables = Exact<{
+  chessID: Scalars['String'];
+}>;
+
+
+export type EndGameMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'endGame'>
+);
+
 export type GameStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -113,14 +176,14 @@ export type GameStatusQuery = (
   & Pick<Query, 'GameStatus'>
 );
 
-export type InvitationMutationVariables = Exact<{
+export type InviteMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
 
 
-export type InvitationMutation = (
+export type InviteMutation = (
   { __typename?: 'Mutation' }
-  & { invitation: (
+  & { invite: (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
@@ -163,7 +226,71 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'UserClass' }
-    & Pick<UserClass, '_id' | 'username' | 'email'>
+    & UserFragmentFragment
+  )> }
+);
+
+export type CurrentGameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentGameQuery = (
+  { __typename?: 'Query' }
+  & { currentGame?: Maybe<(
+    { __typename?: 'ChessClass' }
+    & Pick<ChessClass, '_id'>
+    & { white: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ), black: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ) }
+  )> }
+);
+
+export type InvitationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InvitationsQuery = (
+  { __typename?: 'Query' }
+  & { invitationsOfUser?: Maybe<Array<(
+    { __typename?: 'InvitationClass' }
+    & { host: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ), friend: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ) }
+  )>> }
+);
+
+export type GameStartedSubscriptionVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GameStartedSubscription = (
+  { __typename?: 'Subscription' }
+  & Pick<Subscription, 'gameStarted'>
+);
+
+export type NewInvitationSubscriptionVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type NewInvitationSubscription = (
+  { __typename?: 'Subscription' }
+  & { newInvitation?: Maybe<(
+    { __typename?: 'InvitationClass' }
+    & { host: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ), friend: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ) }
   )> }
 );
 
@@ -181,6 +308,24 @@ export const UserFragmentFragmentDoc = gql`
   gameStatus
 }
     `;
+export const AcceptInvitationDocument = gql`
+    mutation AcceptInvitation($hostID: String!) {
+  acceptInvitation(hostID: $hostID)
+}
+    `;
+
+export function useAcceptInvitationMutation() {
+  return Urql.useMutation<AcceptInvitationMutation, AcceptInvitationMutationVariables>(AcceptInvitationDocument);
+};
+export const EndGameDocument = gql`
+    mutation EndGame($chessID: String!) {
+  endGame(chessID: $chessID)
+}
+    `;
+
+export function useEndGameMutation() {
+  return Urql.useMutation<EndGameMutation, EndGameMutationVariables>(EndGameDocument);
+};
 export const GameStatusDocument = gql`
     query GameStatus {
   GameStatus
@@ -190,9 +335,9 @@ export const GameStatusDocument = gql`
 export function useGameStatusQuery(options: Omit<Urql.UseQueryArgs<GameStatusQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GameStatusQuery>({ query: GameStatusDocument, ...options });
 };
-export const InvitationDocument = gql`
-    mutation Invitation($email: String!) {
-  invitation(email: $email) {
+export const InviteDocument = gql`
+    mutation Invite($email: String!) {
+  invite(email: $email) {
     errors {
       ...ErrorFragment
     }
@@ -200,8 +345,8 @@ export const InvitationDocument = gql`
 }
     ${ErrorFragmentFragmentDoc}`;
 
-export function useInvitationMutation() {
-  return Urql.useMutation<InvitationMutation, InvitationMutationVariables>(InvitationDocument);
+export function useInviteMutation() {
+  return Urql.useMutation<InviteMutation, InviteMutationVariables>(InviteDocument);
 };
 export const LoginDocument = gql`
     mutation Login($token: String!) {
@@ -232,13 +377,69 @@ export function useLogoutMutation() {
 export const MeDocument = gql`
     query Me {
   me {
-    _id
-    username
-    email
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const CurrentGameDocument = gql`
+    query CurrentGame {
+  currentGame {
+    _id
+    white {
+      ...UserFragment
+    }
+    black {
+      ...UserFragment
+    }
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+export function useCurrentGameQuery(options: Omit<Urql.UseQueryArgs<CurrentGameQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CurrentGameQuery>({ query: CurrentGameDocument, ...options });
+};
+export const InvitationsDocument = gql`
+    query Invitations {
+  invitationsOfUser {
+    host {
+      ...UserFragment
+    }
+    friend {
+      ...UserFragment
+    }
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+export function useInvitationsQuery(options: Omit<Urql.UseQueryArgs<InvitationsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<InvitationsQuery>({ query: InvitationsDocument, ...options });
+};
+export const GameStartedDocument = gql`
+    subscription GameStarted($id: String!) {
+  gameStarted(id: $id)
+}
+    `;
+
+export function useGameStartedSubscription<TData = GameStartedSubscription>(options: Omit<Urql.UseSubscriptionArgs<GameStartedSubscriptionVariables>, 'query'> = {}, handler?: Urql.SubscriptionHandler<GameStartedSubscription, TData>) {
+  return Urql.useSubscription<GameStartedSubscription, TData, GameStartedSubscriptionVariables>({ query: GameStartedDocument, ...options }, handler);
+};
+export const NewInvitationDocument = gql`
+    subscription NewInvitation($id: String!) {
+  newInvitation(id: $id) {
+    host {
+      ...UserFragment
+    }
+    friend {
+      ...UserFragment
+    }
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+export function useNewInvitationSubscription<TData = NewInvitationSubscription>(options: Omit<Urql.UseSubscriptionArgs<NewInvitationSubscriptionVariables>, 'query'> = {}, handler?: Urql.SubscriptionHandler<NewInvitationSubscription, TData>) {
+  return Urql.useSubscription<NewInvitationSubscription, TData, NewInvitationSubscriptionVariables>({ query: NewInvitationDocument, ...options }, handler);
 };

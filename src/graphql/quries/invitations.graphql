@@ -1,0 +1,10 @@
+query Invitations {
+  invitationsOfUser {
+    host {
+      ...UserFragment
+    }
+    friend {
+      ...UserFragment
+    }
+  }
+}
