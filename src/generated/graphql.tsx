@@ -54,6 +54,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   invite: UserResponse;
+  saveMove: Scalars['Boolean'];
   endGame: Scalars['Boolean'];
   cancelInvitation: Scalars['Boolean'];
   acceptInvitation: Scalars['Boolean'];
@@ -67,6 +68,13 @@ export type MutationLoginArgs = {
 
 export type MutationInviteArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationSaveMoveArgs = {
+  move: Scalars['String'];
+  position: Scalars['String'];
+  chessID: Scalars['String'];
 };
 
 
@@ -107,8 +115,14 @@ export type QueryUserByIdArgs = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  move?: Maybe<Scalars['String']>;
   gameStarted?: Maybe<Scalars['Boolean']>;
   newInvitation?: Maybe<InvitationClass>;
+};
+
+
+export type SubscriptionMoveArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -219,6 +233,18 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
+export type SaveMoveMutationVariables = Exact<{
+  chessID: Scalars['String'];
+  position: Scalars['String'];
+  move: Scalars['String'];
+}>;
+
+
+export type SaveMoveMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'saveMove'>
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -273,6 +299,16 @@ export type GameStartedSubscriptionVariables = Exact<{
 export type GameStartedSubscription = (
   { __typename?: 'Subscription' }
   & Pick<Subscription, 'gameStarted'>
+);
+
+export type MoveSubscriptionVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type MoveSubscription = (
+  { __typename?: 'Subscription' }
+  & Pick<Subscription, 'move'>
 );
 
 export type NewInvitationSubscriptionVariables = Exact<{
@@ -374,6 +410,15 @@ export const LogoutDocument = gql`
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
+export const SaveMoveDocument = gql`
+    mutation SaveMove($chessID: String!, $position: String!, $move: String!) {
+  saveMove(chessID: $chessID, position: $position, move: $move)
+}
+    `;
+
+export function useSaveMoveMutation() {
+  return Urql.useMutation<SaveMoveMutation, SaveMoveMutationVariables>(SaveMoveDocument);
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -426,6 +471,15 @@ export const GameStartedDocument = gql`
 
 export function useGameStartedSubscription<TData = GameStartedSubscription>(options: Omit<Urql.UseSubscriptionArgs<GameStartedSubscriptionVariables>, 'query'> = {}, handler?: Urql.SubscriptionHandler<GameStartedSubscription, TData>) {
   return Urql.useSubscription<GameStartedSubscription, TData, GameStartedSubscriptionVariables>({ query: GameStartedDocument, ...options }, handler);
+};
+export const MoveDocument = gql`
+    subscription Move($id: String!) {
+  move(id: $id)
+}
+    `;
+
+export function useMoveSubscription<TData = MoveSubscription>(options: Omit<Urql.UseSubscriptionArgs<MoveSubscriptionVariables>, 'query'> = {}, handler?: Urql.SubscriptionHandler<MoveSubscription, TData>) {
+  return Urql.useSubscription<MoveSubscription, TData, MoveSubscriptionVariables>({ query: MoveDocument, ...options }, handler);
 };
 export const NewInvitationDocument = gql`
     subscription NewInvitation($id: String!) {

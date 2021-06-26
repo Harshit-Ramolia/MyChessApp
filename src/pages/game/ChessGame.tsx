@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import Chessboard from "chessboardjsx";
 import { ChessInstance, ShortMove } from "chess.js";
-import { ChessClass, useMeQuery } from "../../generated/graphql";
+import {
+  ChessClass,
+  useMeQuery,
+  useMoveSubscription,
+  useSaveMoveMutation,
+} from "../../generated/graphql";
 
 const Chess = require("chess.js");
 interface ChessGameProps {
@@ -12,12 +17,37 @@ const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
   const [chess] = useState<ChessInstance>(
     new Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
   );
-  const [{ data: me }] = useMeQuery();
   const [fen, setFen] = useState(chess.fen());
+  const [, saveMove] = useSaveMoveMutation();
+  const [{ data: me }] = useMeQuery();
+  useMoveSubscription(
+    {
+      variables: { id: me?.me?._id || "" },
+    },
+    (_, data) => {
+      if (data.move) {
+        const objectMove = JSON.parse(data.move);
+        if (chess.move(objectMove)) {
+          console.log(chess.fen());
+          setTimeout(() => {
+            setFen(chess.fen());
+          }, 300);
+        }
+        // setFen(data.move);
+      }
+      return data;
+    }
+  );
 
   const handleMove = (move: ShortMove) => {
     if (chess.move(move)) {
       setFen(chess.fen());
+      const MoveString = JSON.stringify(move);
+      saveMove({
+        chessID: currentGame._id,
+        position: chess.fen(),
+        move: MoveString,
+      });
     }
   };
 

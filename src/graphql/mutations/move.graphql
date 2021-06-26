@@ -1,0 +1,3 @@
+mutation SaveMove($chessID: String!, $position: String!, $move: String!) {
+  saveMove(chessID: $chessID, position: $position, move: $move)
+}

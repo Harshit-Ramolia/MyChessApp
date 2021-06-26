@@ -1,0 +1,3 @@
+subscription Move($id:String!) {
+  move(id:$id)
+}
