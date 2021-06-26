@@ -15,13 +15,11 @@ const Playground: React.FC = () => {
   let body = null;
   let rows: Array<RowType> = [];
 
-  const [rows2] = useNewInvitationSubscription(
-    {
-      variables: {
-        id: me?.me?._id || "",
-      },
-    }
-  );
+  const [rows2] = useNewInvitationSubscription({
+    variables: {
+      id: me?.me?._id || "",
+    },
+  });
   if (!fetching && data?.invitationsOfUser) {
     rows = data?.invitationsOfUser?.map((obj) => ({
       name: `${obj.host.username} (${obj.host.email})`,
@@ -35,7 +33,11 @@ const Playground: React.FC = () => {
     });
   }
   if (!isAuth) {
-    body = <Typography>Please Login to see your Invitations</Typography>;
+    body = (
+      <Typography align="center">
+        Please Login to see your Invitations
+      </Typography>
+    );
   } else {
     body = <CustomizedTables rows={rows} />;
   }

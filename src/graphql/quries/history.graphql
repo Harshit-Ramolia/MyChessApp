@@ -1,7 +1,8 @@
-query CurrentGame {
-  currentGame {
+query History {
+  historyGames {
     _id
-    lastPosition
+    isGameRunning
+    listOfPositions
     white {
       ...UserFragment
     }

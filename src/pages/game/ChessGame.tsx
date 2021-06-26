@@ -3,6 +3,7 @@ import Chessboard from "chessboardjsx";
 import { ChessInstance, ShortMove } from "chess.js";
 import {
   ChessClass,
+  useCurrentGameQuery,
   useMeQuery,
   useMoveSubscription,
   useSaveMoveMutation,
@@ -14,8 +15,13 @@ interface ChessGameProps {
 }
 
 const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
+  const [{ data: currentGameData, fetching }] = useCurrentGameQuery();
+
   const [chess] = useState<ChessInstance>(
-    new Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+    new Chess(
+      currentGameData?.currentGame?.lastPosition ||
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    )
   );
   const [fen, setFen] = useState(chess.fen());
   const [, saveMove] = useSaveMoveMutation();

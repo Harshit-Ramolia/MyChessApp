@@ -1,5 +1,5 @@
 import React from "react";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -11,9 +11,9 @@ import { Button } from "@material-ui/core";
 import { useAcceptInvitationMutation } from "../../generated/graphql";
 import { useHistory } from "react-router-dom";
 
-const StyledTableCell = withStyles((theme) => ({
+const StyledTableCell = withStyles((theme: Theme) => ({
   head: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
   },
   body: {
@@ -21,10 +21,13 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles((theme: Theme) => ({
   root: {
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.primary.light,
+    },
+    "&:nth-of-type(even)": {
+      backgroundColor: theme.palette.secondary.light,
     },
   },
 }))(TableRow);
@@ -32,6 +35,13 @@ const StyledTableRow = withStyles((theme) => ({
 const useStyles = makeStyles({
   table: {
     minWidth: 700,
+  },
+  accept: {
+    color: "green",
+    margin: "0 5px",
+  },
+  decline: {
+    color: "red",
   },
 });
 
@@ -55,7 +65,7 @@ const CustomizedTables: React.FC<CustomizedTablesProp> = ({ rows }) => {
           <TableRow>
             <StyledTableCell>Sr. No.</StyledTableCell>
             <StyledTableCell align="center">Invited From</StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
+            <StyledTableCell align="right">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,10 +83,19 @@ const CustomizedTables: React.FC<CustomizedTablesProp> = ({ rows }) => {
                     accept({ hostID: row.HostID });
                     history.push("/game");
                   }}
+                  variant="outlined"
+                  size="small"
+                  className={classes.accept}
                 >
                   Accept
                 </Button>
-                <Button>Decline</Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  className={classes.decline}
+                >
+                  Decline
+                </Button>
               </StyledTableCell>
             </StyledTableRow>
           ))}

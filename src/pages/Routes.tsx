@@ -15,6 +15,7 @@ const Home = React.lazy(() => import("./home"));
 const Playground = React.lazy(() => import("./playground"));
 const Game = React.lazy(() => import("./game"));
 const Invitations = React.lazy(() => import("./invitations"));
+const History = React.lazy(() => import("./history"));
 
 function Routes() {
   return (
@@ -35,6 +36,9 @@ function Routes() {
               </Route>
               <Route path="/invitations" exact>
                 <Invitations />
+              </Route>
+              <Route path="/history" exact>
+                <History />
               </Route>
               <Redirect to="/" />
             </Switch>

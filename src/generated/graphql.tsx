@@ -25,6 +25,8 @@ export type ChessClass = {
   black: UserClass;
   firstPosition?: Maybe<PositionClass>;
   isGameRunning: Scalars['Boolean'];
+  listOfPositions?: Maybe<Array<Scalars['String']>>;
+  lastPosition?: Maybe<Scalars['String']>;
 };
 
 export type ChessResponse = {
@@ -92,7 +94,7 @@ export type PositionClass = {
   _id: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  next?: Maybe<PositionClass>;
+  chessID?: Maybe<Scalars['String']>;
   data?: Maybe<Scalars['String']>;
 };
 
@@ -105,6 +107,7 @@ export type Query = {
   currentGame?: Maybe<ChessClass>;
   createNewChess: ChessResponse;
   allChess: Array<ChessClass>;
+  historyGames?: Maybe<Array<ChessClass>>;
   invitationsOfUser?: Maybe<Array<InvitationClass>>;
 };
 
@@ -263,7 +266,7 @@ export type CurrentGameQuery = (
   { __typename?: 'Query' }
   & { currentGame?: Maybe<(
     { __typename?: 'ChessClass' }
-    & Pick<ChessClass, '_id'>
+    & Pick<ChessClass, '_id' | 'lastPosition'>
     & { white: (
       { __typename?: 'UserClass' }
       & UserFragmentFragment
@@ -272,6 +275,24 @@ export type CurrentGameQuery = (
       & UserFragmentFragment
     ) }
   )> }
+);
+
+export type HistoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HistoryQuery = (
+  { __typename?: 'Query' }
+  & { historyGames?: Maybe<Array<(
+    { __typename?: 'ChessClass' }
+    & Pick<ChessClass, '_id' | 'isGameRunning' | 'listOfPositions'>
+    & { white: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ), black: (
+      { __typename?: 'UserClass' }
+      & UserFragmentFragment
+    ) }
+  )>> }
 );
 
 export type InvitationsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -434,6 +455,7 @@ export const CurrentGameDocument = gql`
     query CurrentGame {
   currentGame {
     _id
+    lastPosition
     white {
       ...UserFragment
     }
@@ -446,6 +468,25 @@ export const CurrentGameDocument = gql`
 
 export function useCurrentGameQuery(options: Omit<Urql.UseQueryArgs<CurrentGameQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CurrentGameQuery>({ query: CurrentGameDocument, ...options });
+};
+export const HistoryDocument = gql`
+    query History {
+  historyGames {
+    _id
+    isGameRunning
+    listOfPositions
+    white {
+      ...UserFragment
+    }
+    black {
+      ...UserFragment
+    }
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+export function useHistoryQuery(options: Omit<Urql.UseQueryArgs<HistoryQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<HistoryQuery>({ query: HistoryDocument, ...options });
 };
 export const InvitationsDocument = gql`
     query Invitations {
