@@ -89,13 +89,6 @@ const CustomizedTables: React.FC<CustomizedTablesProp> = ({ rows }) => {
                 >
                   Accept
                 </Button>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  className={classes.decline}
-                >
-                  Decline
-                </Button>
               </StyledTableCell>
             </StyledTableRow>
           ))}

@@ -10,9 +10,11 @@ import { SubscriptionClient } from "subscriptions-transport-ws";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import {
   AcceptInvitationMutation,
-  GameStartedSubscription,
+  CancelInvitationMutation,
+  EndGameMutation,
   GameStatusDocument,
   GameStatusQuery,
+  InvalidateQueryMutation,
   InviteMutation,
   LoginMutation,
   LogoutMutation,
@@ -40,7 +42,6 @@ const client = createClient({
       updates: {
         Mutation: {
           login: (result, args, cache, info) => {
-            console.log("L")
             CustomUpdateQuery<LoginMutation, MeQuery>(
               cache,
               { query: MeDocument },
@@ -66,11 +67,12 @@ const client = createClient({
               }
             );
             cache.invalidate("Query", "invitationsOfUser");
+            cache.invalidate("Query", "historyGames");
             cache.invalidate("Query", "currentGame");
           },
-          logout: (result, args, caches, info) => {
+          logout: (result, args, cache, info) => {
             CustomUpdateQuery<LogoutMutation, MeQuery>(
-              caches,
+              cache,
               { query: MeDocument },
               result,
               (logoutResponse, query) => {
@@ -82,7 +84,7 @@ const client = createClient({
               }
             );
             CustomUpdateQuery<LogoutMutation, GameStatusQuery>(
-              caches,
+              cache,
               { query: GameStatusDocument },
               result,
               (logoutResponse, query) => {
@@ -93,10 +95,13 @@ const client = createClient({
                 }
               }
             );
+            cache.invalidate("Query", "invitationsOfUser");
+            cache.invalidate("Query", "historyGames");
+            cache.invalidate("Query", "currentGame");
           },
-          invite: (result, args, caches, info) => {
+          invite: (result, args, cache, info) => {
             CustomUpdateQuery<InviteMutation, GameStatusQuery>(
-              caches,
+              cache,
               { query: GameStatusDocument },
               result,
               (invitationResponse, query) => {
@@ -124,19 +129,46 @@ const client = createClient({
             cache.invalidate("Query", "invitationsOfUser");
             cache.invalidate("Query", "currentGame");
           },
-        },
-        Subscription: {
-          gameStarted: (result, args, cache, info) => {
-            console.log("A")
-            CustomUpdateQuery<GameStartedSubscription, GameStatusQuery>(
+          invalidateQuery: (result, args, cache, info) => {
+            cache.invalidate("Query", "invitationsOfUser");
+            cache.invalidate("Query", "currentGame");
+            CustomUpdateQuery<InvalidateQueryMutation, GameStatusQuery>(
+              cache,
+              { query: GameStatusDocument },
+              result,
+              (InvalidateQueryResult, query) => {
+                if (typeof InvalidateQueryResult.invalidateQuery!=="number") {
+                  return query;
+                } else {
+                  return { GameStatus: InvalidateQueryResult.invalidateQuery };
+                }
+              }
+            );
+          },
+          endGame: (result, args, cache, info) => {
+            CustomUpdateQuery<EndGameMutation, GameStatusQuery>(
               cache,
               { query: GameStatusDocument },
               result,
               (Result, query) => {
-                if (Result.gameStarted === false) {
+                if (!Result.endGame) {
                   return query;
                 } else {
-                  return { GameStatus: 2 };
+                  return { GameStatus: 0 };
+                }
+              }
+            );
+          },
+          cancelInvitation: (result, args, cache, info) => {
+            CustomUpdateQuery<CancelInvitationMutation, GameStatusQuery>(
+              cache,
+              { query: GameStatusDocument },
+              result,
+              (Result, query) => {
+                if (!Result.cancelInvitation) {
+                  return query;
+                } else {
+                  return { GameStatus: 0 };
                 }
               }
             );

@@ -1,23 +1,33 @@
-import { Typography } from "@material-ui/core";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import {
   useGameStartedSubscription,
   useGameStatusQuery,
+  useInvalidateQueryMutation,
   useMeQuery,
 } from "../../generated/graphql";
 import Information from "./Information";
 import RunningGame from "./RunningGame";
-import StartNewGame from "./StartNewGame";
+import Waiting from "./Waiting";
 
 const Game = () => {
   const [{ data, fetching }] = useGameStatusQuery();
   let body = null;
   const [{ data: me }] = useMeQuery();
-  const [{ data: gameStartedData }] = useGameStartedSubscription({
-    variables: {
-      id: me?.me?._id || "",
+  const [, invalidateQuery] = useInvalidateQueryMutation();
+  useGameStartedSubscription(
+    {
+      variables: {
+        id: me?.me?._id || "",
+      },
     },
-  });
+    (_, response) => {
+      if (response?.gameStarted) {
+        invalidateQuery({ GameStatus: 2 });
+      }
+      return response;
+    }
+  );
   if (!fetching) {
     if (
       !data?.GameStatus ||
@@ -26,11 +36,10 @@ const Game = () => {
     ) {
       body = <Information status={data ? data.GameStatus : -1} />;
     } else if (data.GameStatus === 1) {
-      body = <Typography>Waiting ...</Typography>;
-    } else if (gameStartedData?.gameStarted || data.GameStatus === 2) {
+      body = <Waiting />;
+    } else if (data.GameStatus === 2) {
       body = <RunningGame></RunningGame>;
     }
-    console.log(gameStartedData, data)
   }
   return <React.Fragment>{body}</React.Fragment>;
 };

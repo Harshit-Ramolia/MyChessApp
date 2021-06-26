@@ -1,0 +1,3 @@
+mutation InvalidateQuery($GameStatus: Float!) {
+    invalidateQuery(GameStatus:$GameStatus)
+}

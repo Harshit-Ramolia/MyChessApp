@@ -57,7 +57,6 @@ const CustomizedTables: React.FC<CustomizedTablesProp> = ({ rows }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [positions, setPositions] = useState<Array<string>>([]);
   const handleOpen = (positions: string[]) => {
-    // console.log(positions);
     setPositions(positions);
     setOpen(true)
   };

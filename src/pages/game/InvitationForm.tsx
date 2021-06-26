@@ -4,12 +4,13 @@ import {
   FormControl,
   makeStyles,
   TextField,
+  Theme,
 } from "@material-ui/core";
 import { Formik, Form } from "formik";
 import React from "react";
 import { useInviteMutation } from "../../generated/graphql";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme:Theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chessboard from "chessboardjsx";
 import { ChessInstance, ShortMove } from "chess.js";
 import {
   ChessClass,
   useCurrentGameQuery,
+  useGameStartedSubscription,
+  useInvalidateQueryMutation,
   useMeQuery,
   useMoveSubscription,
   useSaveMoveMutation,
@@ -15,17 +17,32 @@ interface ChessGameProps {
 }
 
 const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
-  const [{ data: currentGameData, fetching }] = useCurrentGameQuery();
-
+  const [{ data: currentGameData, fetching }, reExecute] =
+    useCurrentGameQuery();
+  const [{ data: me }] = useMeQuery();
+  const [, invalidateQuery] = useInvalidateQueryMutation();
+  useGameStartedSubscription(
+    {
+      variables: {
+        id: me?.me?._id || "",
+      },
+    },
+    (_, response) => {
+      if (response?.gameStarted) {
+        invalidateQuery({ GameStatus: 0 });
+      }
+      return response;
+    }
+  );
   const [chess] = useState<ChessInstance>(
     new Chess(
-      currentGameData?.currentGame?.lastPosition ||
+      (!fetching && currentGameData?.currentGame?.lastPosition) ||
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     )
   );
+
   const [fen, setFen] = useState(chess.fen());
   const [, saveMove] = useSaveMoveMutation();
-  const [{ data: me }] = useMeQuery();
   useMoveSubscription(
     {
       variables: { id: me?.me?._id || "" },
@@ -34,12 +51,10 @@ const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
       if (data.move) {
         const objectMove = JSON.parse(data.move);
         if (chess.move(objectMove)) {
-          console.log(chess.fen());
           setTimeout(() => {
             setFen(chess.fen());
           }, 300);
         }
-        // setFen(data.move);
       }
       return data;
     }

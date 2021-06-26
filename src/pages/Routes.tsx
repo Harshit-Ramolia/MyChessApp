@@ -18,6 +18,7 @@ const Invitations = React.lazy(() => import("./invitations"));
 const History = React.lazy(() => import("./history"));
 
 function Routes() {
+  
   return (
     <React.Fragment>
       <Router>

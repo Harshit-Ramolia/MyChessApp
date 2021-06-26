@@ -1,6 +1,8 @@
 import { Theme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import { useInvalidateQueryMutation } from "../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) => ({
   toolbar: {
@@ -24,6 +26,11 @@ interface WrapperProps {}
 
 const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   const classes = useStyles();
+  const location = useLocation();
+  const [, invalidateQuery] = useInvalidateQueryMutation();
+  useEffect(() => {
+    invalidateQuery({GameStatus:3});
+  }, [location.pathname]);
   return (
     <React.Fragment>
       <main className={classes.content}>

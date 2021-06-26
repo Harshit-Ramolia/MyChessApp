@@ -56,6 +56,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   invite: UserResponse;
+  invalidateQuery: Scalars['Float'];
   saveMove: Scalars['Boolean'];
   endGame: Scalars['Boolean'];
   cancelInvitation: Scalars['Boolean'];
@@ -70,6 +71,11 @@ export type MutationLoginArgs = {
 
 export type MutationInviteArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationInvalidateQueryArgs = {
+  GameStatus: Scalars['Float'];
 };
 
 
@@ -165,6 +171,14 @@ export type UserFragmentFragment = (
   & Pick<UserClass, '_id' | 'username' | 'email' | 'gameStatus'>
 );
 
+export type CancelInvitationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CancelInvitationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'cancelInvitation'>
+);
+
 export type AcceptInvitationMutationVariables = Exact<{
   hostID: Scalars['String'];
 }>;
@@ -185,12 +199,14 @@ export type EndGameMutation = (
   & Pick<Mutation, 'endGame'>
 );
 
-export type GameStatusQueryVariables = Exact<{ [key: string]: never; }>;
+export type InvalidateQueryMutationVariables = Exact<{
+  GameStatus: Scalars['Float'];
+}>;
 
 
-export type GameStatusQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'GameStatus'>
+export type InvalidateQueryMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'invalidateQuery'>
 );
 
 export type InviteMutationVariables = Exact<{
@@ -275,6 +291,14 @@ export type CurrentGameQuery = (
       & UserFragmentFragment
     ) }
   )> }
+);
+
+export type GameStatusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GameStatusQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'GameStatus'>
 );
 
 export type HistoryQueryVariables = Exact<{ [key: string]: never; }>;
@@ -365,6 +389,15 @@ export const UserFragmentFragmentDoc = gql`
   gameStatus
 }
     `;
+export const CancelInvitationDocument = gql`
+    mutation CancelInvitation {
+  cancelInvitation
+}
+    `;
+
+export function useCancelInvitationMutation() {
+  return Urql.useMutation<CancelInvitationMutation, CancelInvitationMutationVariables>(CancelInvitationDocument);
+};
 export const AcceptInvitationDocument = gql`
     mutation AcceptInvitation($hostID: String!) {
   acceptInvitation(hostID: $hostID)
@@ -383,14 +416,14 @@ export const EndGameDocument = gql`
 export function useEndGameMutation() {
   return Urql.useMutation<EndGameMutation, EndGameMutationVariables>(EndGameDocument);
 };
-export const GameStatusDocument = gql`
-    query GameStatus {
-  GameStatus
+export const InvalidateQueryDocument = gql`
+    mutation InvalidateQuery($GameStatus: Float!) {
+  invalidateQuery(GameStatus: $GameStatus)
 }
     `;
 
-export function useGameStatusQuery(options: Omit<Urql.UseQueryArgs<GameStatusQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<GameStatusQuery>({ query: GameStatusDocument, ...options });
+export function useInvalidateQueryMutation() {
+  return Urql.useMutation<InvalidateQueryMutation, InvalidateQueryMutationVariables>(InvalidateQueryDocument);
 };
 export const InviteDocument = gql`
     mutation Invite($email: String!) {
@@ -468,6 +501,15 @@ export const CurrentGameDocument = gql`
 
 export function useCurrentGameQuery(options: Omit<Urql.UseQueryArgs<CurrentGameQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CurrentGameQuery>({ query: CurrentGameDocument, ...options });
+};
+export const GameStatusDocument = gql`
+    query GameStatus {
+  GameStatus
+}
+    `;
+
+export function useGameStatusQuery(options: Omit<Urql.UseQueryArgs<GameStatusQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GameStatusQuery>({ query: GameStatusDocument, ...options });
 };
 export const HistoryDocument = gql`
     query History {
