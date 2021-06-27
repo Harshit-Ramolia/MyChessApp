@@ -1,7 +1,7 @@
 import { Theme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React, { useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useInvalidateQueryMutation } from "../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -29,7 +29,8 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   const location = useLocation();
   const [, invalidateQuery] = useInvalidateQueryMutation();
   useEffect(() => {
-    invalidateQuery({GameStatus:3});
+    invalidateQuery();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
   return (
     <React.Fragment>

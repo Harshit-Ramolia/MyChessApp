@@ -6,7 +6,7 @@ import CustomizedTables, { RowType } from "./Table";
 
 interface HistoryProps {}
 
-const History: React.FC<HistoryProps> = ({}) => {
+const History: React.FC<HistoryProps> = () => {
   const [{ data, fetching }] = useHistoryQuery();
   const [{ data: me }] = useMeQuery();
   const isAuth = useIsAuth();

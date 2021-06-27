@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Chessboard from "chessboardjsx";
 import { ChessInstance, ShortMove } from "chess.js";
 import {
@@ -18,7 +18,7 @@ interface ChessGameProps {
 }
 
 const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
-  const [{ data: currentGameData, fetching }, reExecute] =
+  const [{ data: currentGameData, fetching }] =
     useCurrentGameQuery();
   const [{ data: me }] = useMeQuery();
   const [, invalidateQuery] = useInvalidateQueryMutation();
@@ -30,7 +30,7 @@ const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
     },
     (_, response) => {
       if (response?.gameStarted) {
-        invalidateQuery({ GameStatus: 0 });
+        invalidateQuery();
       }
       return response;
     }

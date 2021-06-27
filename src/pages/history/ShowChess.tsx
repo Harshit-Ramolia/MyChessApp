@@ -1,7 +1,6 @@
-import { Button, Dialog, DialogTitle } from "@material-ui/core";
+import { Button, Dialog } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import Chessboard, { Position } from "chessboardjsx";
-import { InitialChess } from "../../constants/initialChess";
+import Chessboard from "chessboardjsx";
 import { makeStyles, Theme } from "@material-ui/core";
 
 interface ShowChessProps {

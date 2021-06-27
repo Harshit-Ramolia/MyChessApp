@@ -9,7 +9,6 @@ import {
   Drawer,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
 import HomeIcon from "@material-ui/icons/Home";
 import { Link } from "react-router-dom";
 import HistoryIcon from "@material-ui/icons/History";

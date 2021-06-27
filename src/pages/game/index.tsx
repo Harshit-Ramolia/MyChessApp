@@ -1,5 +1,4 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import {
   useGameStartedSubscription,
   useGameStatusQuery,
@@ -23,7 +22,7 @@ const Game = () => {
     },
     (_, response) => {
       if (response?.gameStarted) {
-        invalidateQuery({ GameStatus: 2 });
+        invalidateQuery();
       }
       return response;
     }

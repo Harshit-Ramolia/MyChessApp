@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: "10px 10px",
   },
 }));
-const RunningGame: React.FC<RunningGameProps> = ({}) => {
+const RunningGame: React.FC<RunningGameProps> = () => {
   const [, endGame] = useEndGameMutation();
   const classes = useStyles();
   const [{ data, fetching }] = useCurrentGameQuery();

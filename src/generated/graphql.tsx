@@ -74,11 +74,6 @@ export type MutationInviteArgs = {
 };
 
 
-export type MutationInvalidateQueryArgs = {
-  GameStatus: Scalars['Float'];
-};
-
-
 export type MutationSaveMoveArgs = {
   move: Scalars['String'];
   position: Scalars['String'];
@@ -199,9 +194,7 @@ export type EndGameMutation = (
   & Pick<Mutation, 'endGame'>
 );
 
-export type InvalidateQueryMutationVariables = Exact<{
-  GameStatus: Scalars['Float'];
-}>;
+export type InvalidateQueryMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type InvalidateQueryMutation = (
@@ -417,8 +410,8 @@ export function useEndGameMutation() {
   return Urql.useMutation<EndGameMutation, EndGameMutationVariables>(EndGameDocument);
 };
 export const InvalidateQueryDocument = gql`
-    mutation InvalidateQuery($GameStatus: Float!) {
-  invalidateQuery(GameStatus: $GameStatus)
+    mutation InvalidateQuery {
+  invalidateQuery
 }
     `;
 
