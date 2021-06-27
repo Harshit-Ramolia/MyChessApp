@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 // import React, { Suspense } from "react";
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
