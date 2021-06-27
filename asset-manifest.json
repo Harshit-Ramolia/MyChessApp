@@ -3,12 +3,12 @@
     "static/js/0.0fdd8033.chunk.js": "/MyChessApp/static/js/0.0fdd8033.chunk.js",
     "static/js/0.0fdd8033.chunk.js.map": "/MyChessApp/static/js/0.0fdd8033.chunk.js.map",
     "main.css": "/MyChessApp/static/css/main.593d7ee2.chunk.css",
-    "main.js": "/MyChessApp/static/js/main.afab3169.chunk.js",
-    "main.js.map": "/MyChessApp/static/js/main.afab3169.chunk.js.map",
-    "runtime-main.js": "/MyChessApp/static/js/runtime-main.12c39073.js",
-    "runtime-main.js.map": "/MyChessApp/static/js/runtime-main.12c39073.js.map",
-    "static/js/3.c4217d2e.chunk.js": "/MyChessApp/static/js/3.c4217d2e.chunk.js",
-    "static/js/3.c4217d2e.chunk.js.map": "/MyChessApp/static/js/3.c4217d2e.chunk.js.map",
+    "main.js": "/MyChessApp/static/js/main.f1f36f92.chunk.js",
+    "main.js.map": "/MyChessApp/static/js/main.f1f36f92.chunk.js.map",
+    "runtime-main.js": "/MyChessApp/static/js/runtime-main.b9ff519f.js",
+    "runtime-main.js.map": "/MyChessApp/static/js/runtime-main.b9ff519f.js.map",
+    "static/js/3.64064fc1.chunk.js": "/MyChessApp/static/js/3.64064fc1.chunk.js",
+    "static/js/3.64064fc1.chunk.js.map": "/MyChessApp/static/js/3.64064fc1.chunk.js.map",
     "static/js/4.315cc2bf.chunk.js": "/MyChessApp/static/js/4.315cc2bf.chunk.js",
     "static/js/4.315cc2bf.chunk.js.map": "/MyChessApp/static/js/4.315cc2bf.chunk.js.map",
     "static/js/5.63a44fa9.chunk.js": "/MyChessApp/static/js/5.63a44fa9.chunk.js",
@@ -17,8 +17,8 @@
     "static/js/6.f32ecd12.chunk.js.map": "/MyChessApp/static/js/6.f32ecd12.chunk.js.map",
     "static/js/7.6032a513.chunk.js": "/MyChessApp/static/js/7.6032a513.chunk.js",
     "static/js/7.6032a513.chunk.js.map": "/MyChessApp/static/js/7.6032a513.chunk.js.map",
-    "static/js/8.36daf2c9.chunk.js": "/MyChessApp/static/js/8.36daf2c9.chunk.js",
-    "static/js/8.36daf2c9.chunk.js.map": "/MyChessApp/static/js/8.36daf2c9.chunk.js.map",
+    "static/js/8.c0c46814.chunk.js": "/MyChessApp/static/js/8.c0c46814.chunk.js",
+    "static/js/8.c0c46814.chunk.js.map": "/MyChessApp/static/js/8.c0c46814.chunk.js.map",
     "static/js/9.cf9071a8.chunk.js": "/MyChessApp/static/js/9.cf9071a8.chunk.js",
     "static/js/9.cf9071a8.chunk.js.map": "/MyChessApp/static/js/9.cf9071a8.chunk.js.map",
     "static/js/10.6085b81d.chunk.js": "/MyChessApp/static/js/10.6085b81d.chunk.js",
@@ -27,13 +27,13 @@
     "static/js/11.c1b7f07b.chunk.js.map": "/MyChessApp/static/js/11.c1b7f07b.chunk.js.map",
     "index.html": "/MyChessApp/index.html",
     "static/css/main.593d7ee2.chunk.css.map": "/MyChessApp/static/css/main.593d7ee2.chunk.css.map",
-    "static/js/3.c4217d2e.chunk.js.LICENSE.txt": "/MyChessApp/static/js/3.c4217d2e.chunk.js.LICENSE.txt",
+    "static/js/3.64064fc1.chunk.js.LICENSE.txt": "/MyChessApp/static/js/3.64064fc1.chunk.js.LICENSE.txt",
     "static/js/4.315cc2bf.chunk.js.LICENSE.txt": "/MyChessApp/static/js/4.315cc2bf.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.12c39073.js",
-    "static/js/3.c4217d2e.chunk.js",
+    "static/js/runtime-main.b9ff519f.js",
+    "static/js/3.64064fc1.chunk.js",
     "static/css/main.593d7ee2.chunk.css",
-    "static/js/main.afab3169.chunk.js"
+    "static/js/main.f1f36f92.chunk.js"
   ]
 }
