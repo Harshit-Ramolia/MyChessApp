@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles((theme:Theme) => ({
   fallback: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
   }
 }))
 

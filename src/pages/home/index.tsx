@@ -42,6 +42,14 @@ const Home: React.FC<{}> = () => {
         </Link>
         .
       </Typography>
+      <Typography variant="body1" className={classes.body}>
+        And don't forget to checkout for invitations from your friends to play game at{" "}
+        <Link to="/invitations">
+          <span className={classes.span}>invitations</span>
+        </Link>
+        .
+      </Typography>
+      
       <br />
       <Typography variant="h6">Developer Info</Typography>
       <Typography variant="body1" className={classes.body}>

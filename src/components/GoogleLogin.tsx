@@ -32,7 +32,6 @@ const GoogleLoginComponent = () => {
     <GoogleLogin
       clientId="343751366568-6gqpsmkdmb2d8oh0ghkkohhirgmrjge6.apps.googleusercontent.com"
       buttonText="Login"
-      // onFailure={()=>()}
       onSuccess={responseGoogle}
       cookiePolicy={"single_host_origin"}
       render={(renderProps) => (

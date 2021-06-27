@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import GoogleLoginComponent from "./GoogleLogin";
 import { useMeQuery } from "../generated/graphql";
 import LogoutComponent from "./Logout";
+import { Hidden } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -87,7 +88,9 @@ export default function PrimarySearchAppBar({ setOpen }: NavbarProps) {
           </Link>
           <div className={classes.grow} />
           {body}
+          <Hidden smDown>
           <div style={{ width: "100px" }}></div>
+          </Hidden>
         </Toolbar>
       </AppBar>
     </div>

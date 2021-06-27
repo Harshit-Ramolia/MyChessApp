@@ -5,11 +5,11 @@ import Navbar from "./Navbar";
 interface NavDrawerCombinedProps {}
 
 const NavDrawerCombined: React.FC<NavDrawerCombinedProps> = ({ children }) => {
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
   return (
     <React.Fragment>
       <Navbar setOpen={setOpen} />
-      <Drawer open={open} />
+      <Drawer open={open} setOpen={setOpen}/>
     </React.Fragment>
   );
 };

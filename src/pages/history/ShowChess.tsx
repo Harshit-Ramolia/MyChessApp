@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogTitle } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chessboard, { Position } from "chessboardjsx";
 import { InitialChess } from "../../constants/initialChess";
 import { makeStyles, Theme } from "@material-ui/core";
@@ -31,6 +31,10 @@ const ShowChess: React.FC<ShowChessProps> = ({ setOpen, open, positions }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    setPositionValue(InitialPosition);
+    setNumber(0)
+  }, [positions]);
   const classes = useStyles();
   positions.reverse();
   positions = [InitialPosition, ...positions];

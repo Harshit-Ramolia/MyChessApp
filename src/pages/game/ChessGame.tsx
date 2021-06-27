@@ -10,6 +10,7 @@ import {
   useMoveSubscription,
   useSaveMoveMutation,
 } from "../../generated/graphql";
+import { Typography } from "@material-ui/core";
 
 const Chess = require("chess.js");
 interface ChessGameProps {
@@ -60,6 +61,19 @@ const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
     }
   );
 
+  const player = {
+    username: me?.me?.username,
+    playingAs: me?.me?._id === currentGame.white._id ? "w" : "b",
+  };
+
+  const opponent = {
+    username:
+      player.playingAs === "w"
+        ? currentGame.black.username
+        : currentGame.white.username,
+    playingAs: player.playingAs === "w" ? "b" : "w",
+  };
+
   const handleMove = (move: ShortMove) => {
     if (chess.move(move)) {
       setFen(chess.fen());
@@ -74,7 +88,14 @@ const ChessGame: React.FC<ChessGameProps> = ({ currentGame }) => {
 
   return (
     <div className="flex-center">
-      <h1>You vs </h1>
+      <Typography variant="h5" align="center" style={{ margin: "10px" }}>
+        You vs {opponent.username}
+      </Typography>
+      <Typography variant="h6" align="center" style={{ margin: "10px" }}>
+        {fen.split(" ")[1] === player.playingAs
+          ? "Your Turn"
+          : "Waiting for opponent to move"}
+      </Typography>
       <Chessboard
         width={400}
         position={fen}
