@@ -24,7 +24,7 @@ const subscriptionClient = new SubscriptionClient(`ws://${SERVER_URL}`, {
 });
 
 const client = createClient({
-  url: `https://${SERVER_URL}`,
+  url: `http://${SERVER_URL}`,
   fetchOptions: {
     credentials: "include",
   },
