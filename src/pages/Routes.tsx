@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 // import React, { Suspense } from "react";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Redirect,
   Route,
   Switch,
@@ -18,10 +18,9 @@ const Invitations = React.lazy(() => import("./invitations"));
 const History = React.lazy(() => import("./history"));
 
 function Routes() {
-  
   return (
     <React.Fragment>
-      <Router basename ="/MyChessApp">
+      <Router >
         <NavDrawerCombined />
         <Suspense fallback={Fallback}>
           <NavDrawerWrapper>
