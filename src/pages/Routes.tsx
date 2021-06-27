@@ -21,7 +21,7 @@ function Routes() {
   
   return (
     <React.Fragment>
-      <Router>
+      <Router basename ="/MyChessApp">
         <NavDrawerCombined />
         <Suspense fallback={Fallback}>
           <NavDrawerWrapper>
