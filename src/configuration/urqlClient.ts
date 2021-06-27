@@ -18,12 +18,12 @@ import {
 import { CustomUpdateQuery } from "../utils/CustomQueryUpdate";
 
 const subscriptionClient = new SubscriptionClient(
-  "ws://localhost:8080/graphql",
+  "ws://chessharshit.herokuapp.com/graphql",
   { reconnect: true }
 );
 
 const client = createClient({
-  url: "http://localhost:8080/graphql",
+  url: "https://chessharshit.herokuapp.com/graphql",
   fetchOptions: {
     credentials: "include",
   },
