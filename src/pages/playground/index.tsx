@@ -45,24 +45,6 @@ const Playground: React.FC = () => {
           >
             Clear
           </Button>
-          <Button
-            className={classes.buttons}
-            color="primary"
-            variant="outlined"
-            size="small"
-            disabled
-          >
-            Save
-          </Button>
-          <Button
-            className={classes.buttons}
-            color="primary"
-            variant="outlined"
-            size="small"
-            disabled
-          >
-            Load
-          </Button>
         </div>
         <Chessboard
           position={positionValue}
