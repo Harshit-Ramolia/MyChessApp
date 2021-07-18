@@ -17,14 +17,18 @@ import {
 } from "../generated/graphql";
 import { CustomUpdateQuery } from "../utils/CustomQueryUpdate";
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+// const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-const subscriptionClient = new SubscriptionClient(`ws://${SERVER_URL}`, {
+// const subscriptionClient = new SubscriptionClient(`wss://chessharshit.herokuapp.com/graphql`, {
+//   reconnect: true,
+// });
+
+const subscriptionClient = new SubscriptionClient(`ws://localhost:8080/graphql`, {
   reconnect: true,
 });
 
 const client = createClient({
-  url: `http://${SERVER_URL}`,
+  url: `/graphql`,
   fetchOptions: {
     credentials: "include",
   },
